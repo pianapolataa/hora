@@ -83,7 +83,7 @@ env:
     sampleProb: [1.0]
 
   asset:
-    handAsset: '/Users/sissi/Downloads/hora/assets/robot.urdf'
+    handAsset: '/home_shared/grail_sissi/hora/assets/robot.urdf' # /Users/sissi/Downloads/hora/assets/robot.urdf # /home_shared/grail_sissi/hora/assets/robot.urdf
 
   # set to True if you use camera sensors in the environment
   enableCameraSensors: False
