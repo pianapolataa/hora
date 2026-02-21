@@ -19,16 +19,35 @@ class RukaHandGrasp(RukaHandHora):
         # Expanded to 20 joints. Added 0.0 at mimic indices [2, 6, 10, 14]
         # These will be overwritten by the mimic logic anyway.
         self.canonical_pose = [
-            0.082, 1.244, 1.244, 0.265,  # Index
-            0.298, 1.104, 1.104, 1.163,  # Middle
-            0.953, -0.138, -0.138, 0.005, # Ring
-            1.096, 0.080, 0.080, 0.150,  # Thumb
-            0.029, 1.337, 0.285, 0.317   # Extras/Base
+            -0.465732, # wrist_yaw
+            -0.191799, # index_splay
+            1.7,       # index_mcp
+            0.0,       # index_pip
+            0.0,       # index_dip
+            0.0,       # (placeholder 1)
+            1.7,      # mid_mcp
+            0.0,       # mid_pip
+            0.0,       # mid_dip
+            0.0,       # (placeholder 2)
+            -0.301426, # ring_splay
+            1.7,       # ring_mcp
+            0.0,       # ring_pip
+            0.0,       # ring_dip
+            0.0,       # (placeholder 3)
+            -0.298132, # pinky_splay
+            1.7,       # pinky_mcp
+            0.0,       # pinky_pip
+            0.0,       # pinky_dip
+            0.0,       # (placeholder 4)
+            0.5,      # thumb_cmc
+            -0.77,     # thumb_mcp
+            0.0,       # thumb_ip
+            0.0        # (placeholder 5)
         ]
         
         # Joint Indices for 20-DOF hand
-        self.dip_indices = [2, 6, 10, 14]
-        self.pip_indices = [1, 5, 9, 13]
+        self.dip_indices = [5, 8, 12, 16]
+        self.pip_indices = [4, 7, 11, 15]
         
         self.x_unit_tensor = to_torch([1, 0, 0], dtype=torch.float, device=self.device).repeat((self.num_envs, 1))
         self.y_unit_tensor = to_torch([0, 1, 0], dtype=torch.float, device=self.device).repeat((self.num_envs, 1))
@@ -50,6 +69,7 @@ class RukaHandGrasp(RukaHandHora):
         
         if success.any():
             self.saved_grasping_states = torch.cat([self.saved_grasping_states, all_states[env_ids][success]])
+            print("success")
             print('current cache size:', self.saved_grasping_states.shape[0])
 
         if len(self.saved_grasping_states) >= 5e4:
@@ -74,8 +94,9 @@ class RukaHandGrasp(RukaHandHora):
         pos = to_torch(self.canonical_pose, device=self.device)[None].repeat(len(env_ids), 1)
 
 
-        print(f"DEBUG: pos shape: {pos.shape}")
-        print(f"DEBUG: rand_floats slice shape: {rand_floats[:, 5:5 + self.num_allegro_hand_dofs].shape}")
+        # print(f"DEBUG: pos shape: {pos.shape}")
+        # print(f"DEBUG: rand_floats slice shape: {rand_floats[:, 5:5 + self.num_allegro_hand_dofs].shape}")
+        print("717")
         pos += 0.25 * rand_floats[:, 5:5 + self.num_allegro_hand_dofs]
         
         # MANUALLY ENFORCE MIMICRY for the reset pose
@@ -111,7 +132,7 @@ class RukaHandGrasp(RukaHandHora):
 
         obj_pos = self.rigid_body_states[:, [-1], :3]
         # Fingertip rigid body indices
-        finger_pos = self.rigid_body_states[:, [5, 10, 15, 20], :3]
+        finger_pos = self.rigid_body_states[:, [6, 10, 15, 20, 24], :3]
         
         cond1 = (torch.sqrt(((obj_pos - finger_pos) ** 2).sum(-1)) < 0.1).all(-1)
         cond2 = contact_condition >= 2
