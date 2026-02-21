@@ -23,18 +23,21 @@ class RukaHandGrasp(RukaHandHora):
             -0.191799, # index_splay
             1.7,       # index_mcp
             0.0,       # index_pip
+            0.0,       # index_dip
             1.7,      # mid_mcp
             0.0,       # mid_pip
+            0.0,       # mid_dip
             -0.301426, # ring_splay
             1.7,       # ring_mcp
             0.0,       # ring_pip
+            0.0,       # ring_dip
             -0.298132, # pinky_splay
             1.7,       # pinky_mcp
             0.0,       # pinky_pip
+            0.0,       # pinky_dip
             0.5,      # thumb_cmc
             -0.77,     # thumb_mcp
             0.0,       # thumb_ip
-            0.0        # (placeholder 5)
         ]
         
         # Joint Indices for 20-DOF hand
