@@ -5,9 +5,10 @@
 
 import torch
 import numpy as np
-from isaacgym import gymtorch
+from isaacgym import gymtorch, gymapi
 from isaacgym.torch_utils import torch_rand_float, quat_from_angle_axis, quat_mul, tensor_clamp, to_torch
 from hora.tasks.ruka_hand_hora import RukaHandHora
+import cv2
 
 class RukaHandGrasp(RukaHandHora):
     def __init__(self, config, sim_device, graphics_device_id, headless):
@@ -49,6 +50,13 @@ class RukaHandGrasp(RukaHandHora):
         self.y_unit_tensor = to_torch([0, 1, 0], dtype=torch.float, device=self.device).repeat((self.num_envs, 1))
         self.z_unit_tensor = to_torch([0, 0, 1], dtype=torch.float, device=self.device).repeat((self.num_envs, 1))
 
+        self.video_frames = []
+        camera_props = gymapi.CameraProperties()
+        camera_props.width = 720
+        camera_props.height = 480
+        self.camera_handle = self.gym.create_camera_sensor(self.envs[0], camera_props)
+        self.gym.set_camera_location(self.camera_handle, self.envs[0], gymapi.Vec3(0.6, 0.6, 0.6), gymapi.Vec3(0.0, 0.0, 0.4))
+
     def reset_idx(self, env_ids):
         # ... [Keep randomization of mass/PD gains the same as your provided snippet] ...
         
@@ -67,6 +75,13 @@ class RukaHandGrasp(RukaHandHora):
             self.saved_grasping_states = torch.cat([self.saved_grasping_states, all_states[env_ids][success]])
             print("success")
             print('current cache size:', self.saved_grasping_states.shape[0])
+            if len(self.video_frames) > 0:
+                video_name = f"success_video_{self.saved_grasping_states.shape[0]}.mp4"
+                out = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), 20, (720, 480))
+                for frame in self.video_frames:
+                    out.write(cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
+                out.release()
+                self.video_frames = []
 
         if len(self.saved_grasping_states) >= 5e4:
             name = f'cache/{self.grasp_cache_name}_grasp_50k_s{str(self.base_obj_scale).replace(".", "")}.npy'
@@ -110,6 +125,13 @@ class RukaHandGrasp(RukaHandHora):
                                               gymtorch.unwrap_tensor(hand_indices), len(env_ids))
         
         # ... [Rest of buffers reset] ...
+
+    def post_physics_step(self):
+        super().post_physics_step()
+        if len(self.video_frames) < 1000:
+            self.gym.render_all_camera_sensors(self.sim)
+            raw_img = self.gym.get_camera_image(self.sim, self.envs[0], self.camera_handle, gymapi.IMAGE_COLOR)
+            self.video_frames.append(raw_img.reshape(480, 720, 4)[:, :, :3])
 
     def compute_reward(self, actions):
         # NOTE: Fingertip indices shift in 20-DOF URDF. 
