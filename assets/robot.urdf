@@ -938,7 +938,7 @@
     </collision>
   </link>
   <!-- Joint from base_new to inner -->
-  <joint name="base_yaw" type="revolute">
+  <joint name="base_yaw" type="fixed">
     <origin xyz="-0.00238299 0.00501408 0.042423" rpy="1.5708 0.132284 -3.14159"/>
     <parent link="base_new"/>
     <child link="inner"/>

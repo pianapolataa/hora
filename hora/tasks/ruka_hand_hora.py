@@ -151,9 +151,9 @@ class RukaHandHora(VecTask):
         else:
             print(f"WARNING: Found {len(pip_idx)} PIPs and {len(dip_idx)} DIPs. Expected 4 of each.")
             print("Using fallback indices. Please check your URDF joint names.")
-            self.pip_indices = to_torch([2, 7, 12, 17], dtype=torch.long, device=self.device)
-            self.dip_indices = to_torch([3, 8, 13, 18], dtype=torch.long, device=self.device)
-            self.non_dip_indices = to_torch([i for i in range(self.num_allegro_hand_dofs) if i not in [3, 8, 13, 18]], dtype=torch.long, device=self.device)
+            self.pip_indices = to_torch([4, 7, 11, 15], dtype=torch.long, device=self.device)
+            self.dip_indices = to_torch([5, 8, 12, 16], dtype=torch.long, device=self.device)
+            self.non_dip_indices = to_torch([i for i in range(self.num_allegro_hand_dofs) if i not in [5, 8, 12, 16]], dtype=torch.long, device=self.device)
         # ---------------------------------------------------------------
 
         self.allegro_hand_dof_lower_limits = []
