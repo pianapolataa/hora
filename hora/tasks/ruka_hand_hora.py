@@ -71,6 +71,26 @@ class RukaHandHora(VecTask):
         self.rigid_body_states = gymtorch.wrap_tensor(rigid_body_tensor).view(self.num_envs, -1, 13)
         self.num_bodies = self.rigid_body_states.shape[1]
 
+        # --- DEBUG START ---
+        # Get names for the first environment
+        rb_names = self.gym.get_actor_rigid_body_names(self.envs[0], 0) # 0 is the hand actor index in the env
+
+        print("\n" + "="*30)
+        print("RIGID BODY NAMES AND INDICES")
+        print("="*30)
+        for i, name in enumerate(rb_names):
+            print(f"Index {i}: {name}")
+        print("="*30 + "\n")
+
+        # Also print DOF names to fix your canonical pose
+        dof_names = self.gym.get_actor_dof_names(self.envs[0], 0)
+        print("DOF NAMES AND INDICES")
+        print("="*30)
+        for i, name in enumerate(dof_names):
+            print(f"Index {i}: {name}")
+        print("="*30 + "\n")
+        # --- DEBUG END ---
+
         self.root_state_tensor = gymtorch.wrap_tensor(actor_root_state_tensor).view(-1, 13)
 
         self._refresh_gym()
