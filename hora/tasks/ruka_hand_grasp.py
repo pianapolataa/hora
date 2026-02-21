@@ -116,3 +116,7 @@ class RukaHandGrasp(RukaHandHora):
         cond = cond1.float() * cond2.float() * cond3.float()
         self.reset_buf[cond < 1] = 1
         self.reset_buf[self.progress_buf >= self.max_episode_length] = 1
+
+@torch.jit.script
+def randomize_rotation(rand0, rand1, x_unit_tensor, y_unit_tensor):
+    return quat_mul(quat_from_angle_axis(rand0 * np.pi, x_unit_tensor), quat_from_angle_axis(rand1 * np.pi, y_unit_tensor))
