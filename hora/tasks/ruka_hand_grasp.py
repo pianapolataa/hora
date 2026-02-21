@@ -168,7 +168,7 @@ class RukaHandGrasp(RukaHandHora):
         if headless and graphics_device_id < 0:
             graphics_device_id = 0
             
-        super().__init__(config, sim_device=sim_device, graphics_device_id=graphics_device_id, headless=headless)
+        super().__init__(config, sim_device=sim_device, graphics_device_id=0, headless=headless)
         
         # 20 joints + 7 root state (pos/rot) = 27 columns
         self.saved_grasping_states = torch.zeros((0, 27), dtype=torch.float, device=self.device)
