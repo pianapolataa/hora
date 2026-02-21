@@ -101,14 +101,14 @@ class RukaHandHora(VecTask):
         # useful buffers
         self.object_rot_prev = self.object_rot.clone()
         self.object_pos_prev = self.object_pos.clone()
-        self.init_pose_buf = torch.zeros((self.num_envs, self.num_dofs), device=self.device, dtype=torch.float)
+        self.init_pose_buf = torch.zeros((self.num_envs, self.num_allegro_hand_dofs), device=self.device, dtype=torch.float)
         
         # ACTIONS remains num_actions (16) if RL policy outputs 16
         self.actions = torch.zeros((self.num_envs, self.num_actions), device=self.device, dtype=torch.float)
         
         # TORQUES and GAINS must match DOF count (20) to prevent shape mismatch in low level control
         self.torques = torch.zeros((self.num_envs, self.num_allegro_hand_dofs), device=self.device, dtype=torch.float)
-        self.dof_vel_finite_diff = torch.zeros((self.num_envs, self.num_dofs), device=self.device, dtype=torch.float)
+        self.dof_vel_finite_diff = torch.zeros((self.num_envs, self.num_allegro_hand_dofs), device=self.device, dtype=torch.float)
         assert type(self.p_gain) in [int, float] and type(self.d_gain) in [int, float], 'assume p_gain and d_gain are only scalars'
         self.p_gain = torch.ones((self.num_envs, self.num_allegro_hand_dofs), device=self.device, dtype=torch.float) * self.p_gain
         self.d_gain = torch.ones((self.num_envs, self.num_allegro_hand_dofs), device=self.device, dtype=torch.float) * self.d_gain
@@ -341,11 +341,11 @@ class RukaHandHora(VecTask):
 
         # refill the initialized buffers
         at_reset_env_ids = self.at_reset_buf.nonzero(as_tuple=False).squeeze(-1)
-        self.obs_buf_lag_history[at_reset_env_ids, :, 0:16] = unscale(
+        self.obs_buf_lag_history[at_reset_env_ids, :, 0:self.num_allegro_hand_dofs] = unscale(
             self.allegro_hand_dof_pos[at_reset_env_ids], self.allegro_hand_dof_lower_limits,
             self.allegro_hand_dof_upper_limits
         ).clone().unsqueeze(1)
-        self.obs_buf_lag_history[at_reset_env_ids, :, 16:32] = self.allegro_hand_dof_pos[at_reset_env_ids].unsqueeze(1)
+        self.obs_buf_lag_history[at_reset_env_ids, :, self.num_allegro_hand_dofs:self.num_allegro_hand_dofs * 2] = self.allegro_hand_dof_pos[at_reset_env_ids].unsqueeze(1)
         t_buf = (self.obs_buf_lag_history[:, -3:].reshape(self.num_envs, -1)).clone()
 
         self.obs_buf[:, :t_buf.shape[1]] = t_buf
@@ -600,7 +600,7 @@ class RukaHandHora(VecTask):
         self.prop_hist_len = self.config['env']['hora']['propHistoryLen']
         self.num_env_factors = self.config['env']['hora']['privInfoDim']
         self.priv_info_buf = torch.zeros((num_envs, self.num_env_factors), device=self.device, dtype=torch.float)
-        self.proprio_hist_buf = torch.zeros((num_envs, self.prop_hist_len, 32), device=self.device, dtype=torch.float)
+        self.proprio_hist_buf = torch.zeros((num_envs, self.prop_hist_len, self.num_allegro_hand_dofs * 2), device=self.device, dtype=torch.float)
 
     def _setup_reward_config(self, r_config):
         self.angvel_clip_min = r_config['angvelClipMin']
