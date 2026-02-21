@@ -72,6 +72,10 @@ class RukaHandGrasp(RukaHandHora):
 
         # Reset Hand Position (20 joints)
         pos = to_torch(self.canonical_pose, device=self.device)[None].repeat(len(env_ids), 1)
+
+
+        print(f"DEBUG: pos shape: {pos.shape}")
+        print(f"DEBUG: rand_floats slice shape: {rand_floats[:, 5:5 + self.num_allegro_hand_dofs].shape}")
         pos += 0.25 * rand_floats[:, 5:5 + self.num_allegro_hand_dofs]
         
         # MANUALLY ENFORCE MIMICRY for the reset pose
