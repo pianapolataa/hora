@@ -128,7 +128,7 @@ class RukaHandGrasp(RukaHandHora):
 
         obj_pos = self.rigid_body_states[:, [-1], :3]
         # Fingertip rigid body indices
-        finger_pos = self.rigid_body_states[:, [6, 10, 15, 20, 24], :3]
+        finger_pos = self.rigid_body_states[:, [6, 9, 13, 17, 20], :3]
         
         cond1 = (torch.sqrt(((obj_pos - finger_pos) ** 2).sum(-1)) < 0.1).all(-1)
         cond2 = contact_condition >= 2
