@@ -131,6 +131,7 @@ class RukaHandGrasp(RukaHandHora):
         finger_pos = self.rigid_body_states[:, [6, 9, 13, 17, 20], :3]
         
         cond1 = (torch.sqrt(((obj_pos - finger_pos) ** 2).sum(-1)) < 0.1).all(-1)
+        print(torch.sqrt(((obj_pos - finger_pos) ** 2).sum(-1)))
         cond2 = contact_condition >= 2
         cond3 = torch.greater(obj_pos[:, -1, -1], self.reset_z_threshold)
         
