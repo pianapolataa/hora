@@ -345,7 +345,7 @@ class RukaHandHora(VecTask):
             self.allegro_hand_dof_pos[at_reset_env_ids], self.allegro_hand_dof_lower_limits,
             self.allegro_hand_dof_upper_limits
         ).clone().unsqueeze(1)
-        self.obs_buf_lag_history[at_reset_env_ids, :, self.num_allegro_hand_dofs:self.num_allegro_hand_dofs * 2] = self.allegro_hand_dof_pos[at_reset_env_ids].unsqueeze(1)
+        self.obs_buf_lag_history[at_reset_env_ids, :, 20:40] = self.allegro_hand_dof_pos[at_reset_env_ids].unsqueeze(1)
         t_buf = (self.obs_buf_lag_history[:, -3:].reshape(self.num_envs, -1)).clone()
 
         self.obs_buf[:, :t_buf.shape[1]] = t_buf
