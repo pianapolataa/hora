@@ -19,6 +19,7 @@ class RukaHandGrasp(RukaHandHora):
         # Expanded to 20 joints. Added 0.0 at mimic indices [2, 6, 10, 14]
         # These will be overwritten by the mimic logic anyway.
         self.canonical_pose = [
+            -0.17,     # base pitch
             -0.465732, # wrist_yaw
             -0.191799, # index_splay
             1.7,       # index_mcp
