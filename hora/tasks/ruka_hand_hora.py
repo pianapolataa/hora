@@ -133,6 +133,8 @@ class RukaHandHora(VecTask):
         # set allegro_hand dof properties
         self.num_allegro_hand_dofs = self.gym.get_asset_dof_count(self.hand_asset)
         print("DEBUG: ", self.num_allegro_hand_dofs)
+        dof_names = self.gym.get_asset_dof_names(self.hand_asset)
+        print(f"Isaac Gym DOFs ({len(dof_names)}): {dof_names}")
         allegro_hand_dof_props = self.gym.get_asset_dof_properties(self.hand_asset)
 
         # --- MIMIC JOINT LOGIC: Find PIP and DIP indices dynamically ---
