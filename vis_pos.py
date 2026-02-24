@@ -11,21 +11,21 @@ test_angles = [
             0.27,      # base pitch -0.661974 0.647023
             0.17,      # wrist_yaw
             -0.16,     # index_splay
-            0.77,       # index_mcp (0, 1.9)
+            0.67,       # index_mcp (0, 1.9)
             0.32,      # index_pip
             0.32,      # index_dip
-            0.77,      # mid_mcp -0.2 1.91986
+            0.5,      # mid_mcp -0.2 1.91986
             0.33,      # mid_pip
             0.33,      # mid_dip
             -0.3,      # ring_splay
-            0.77,      # ring_mcp 0.0 1.91986
+            0.67,      # ring_mcp 0.0 1.91986
             0.32,       # ring_pip
             0.32,       # ring_dip
             -0.12,     # pinky_splay
-            0.77,      # pinky_mcp 0.0 1.91986
+            0.67,      # pinky_mcp 0.0 1.91986
             0.32,       # pinky_pip
             0.32,       # pinky_dip
-            0.5,       # thumb_cmc
+            0.9,       # thumb_cmc
             -0.53,     # thumb_mcp
             0.2,       # thumb_ip
         ]
@@ -60,7 +60,7 @@ def run_test():
     
     # 3. Load the Tennis Ball
     # Based on your script's logic: small_tennis_ball, mass ~0.05
-    ball_radius = 0.04 # Standard tennis ball is ~6.7cm diameter, radius ~0.033m
+    ball_radius = 0.025 # Standard tennis ball is ~6.7cm diameter, radius ~0.033m
     visual_shape_id = p.createVisualShape(p.GEOM_SPHERE, radius=ball_radius, rgbaColor=[1, 1, 0, 1])
     collision_shape_id = p.createCollisionShape(p.GEOM_SPHERE, radius=ball_radius)
     
@@ -70,7 +70,7 @@ def run_test():
         baseMass=0.05,
         baseCollisionShapeIndex=collision_shape_id,
         baseVisualShapeIndex=visual_shape_id,
-        basePosition=[0.01, 0.12, 0.6], # Slightly above the palm center
+        basePosition=[0.01, 0.17, 0.67], # Slightly above the palm center
     )
 
     # Add friction to both hand and ball to simulate the real physics

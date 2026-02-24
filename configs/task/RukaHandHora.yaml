@@ -24,7 +24,7 @@ env:
 
   clipObservations: 5.0
   clipActions: 1.0
-  reset_height_threshold: 0.6
+  reset_height_threshold: 0.67
   grasp_cache_name: 'internal_ruka'
 
   # Random forces applied to the object

@@ -197,7 +197,7 @@ class RukaHandHora(VecTask):
         self.allegro_hand_dof_upper_limits = to_torch(self.allegro_hand_dof_upper_limits, device=self.device)
 
         hand_pose, obj_pose = self._init_object_pose()
-        obj_pose.p = gymapi.Vec3(0.01, 0.12, 0.6)
+        obj_pose.p = gymapi.Vec3(0.01, 0.17, 0.67)
 
         # compute aggregate size
         self.num_allegro_hand_bodies = self.gym.get_asset_rigid_body_count(self.hand_asset)
