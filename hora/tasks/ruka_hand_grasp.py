@@ -5,6 +5,7 @@
 
 import torch
 import numpy as np
+import os
 from isaacgym import gymtorch
 from isaacgym.torch_utils import torch_rand_float, quat_from_angle_axis, quat_mul, tensor_clamp, to_torch
 from hora.tasks.ruka_hand_hora import RukaHandHora
@@ -16,6 +17,12 @@ class RukaHandGrasp(RukaHandHora):
         # 20 joints + 7 root state (pos/rot) = 27 columns
         self.saved_grasping_states = torch.zeros((0, 27), dtype=torch.float, device=self.device)
         
+        # --- DEBUG SAVING LOGIC ---
+        self.debug_step_count = 0
+        self.debug_joint_angles = [] # Buffer for row-by-row saving
+        if not os.path.exists('debug'): os.makedirs('debug')
+        # ---------------------------
+
         # Expanded to 20 joints. Added 0.0 at mimic indices [2, 6, 10, 14]
         # These will be overwritten by the mimic logic anyway.
         self.canonical_pose = [
@@ -48,6 +55,18 @@ class RukaHandGrasp(RukaHandHora):
         self.x_unit_tensor = to_torch([1, 0, 0], dtype=torch.float, device=self.device).repeat((self.num_envs, 1))
         self.y_unit_tensor = to_torch([0, 1, 0], dtype=torch.float, device=self.device).repeat((self.num_envs, 1))
         self.z_unit_tensor = to_torch([0, 0, 1], dtype=torch.float, device=self.device).repeat((self.num_envs, 1))
+
+    def post_physics_step(self):
+        super().post_physics_step()
+        
+        # --- DEBUG SAVING LOGIC ---
+        # Record joint angles from environment 0 at every step
+        current_angles = self.allegro_hand_dof_pos[0].detach().cpu().numpy()
+        self.debug_joint_angles.append(current_angles)
+        self.debug_step_count += 1
+        save_path = f'debug/joint_angles_step_{self.debug_step_count}.npy'
+        np.save(save_path, np.array(self.debug_joint_angles))
+        # ---------------------------
 
     def reset_idx(self, env_ids):
         # ... [Keep randomization of mass/PD gains the same as your provided snippet] ...
