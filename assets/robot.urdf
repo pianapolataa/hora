@@ -2,6 +2,12 @@
 <!-- Generated using onshape-to-robot -->
 <!-- Onshape https://cad.onshape.com/documents/59040ba514e65eea2b4930b4/w/888a0bf0536dace5ae45ae11/e/e63b444e9d421004a621f462 -->
 <robot name="folderv2">
+  <link name="world"/>
+  <joint name="fixed" type="fixed">
+    <parent link="world"/>
+    <child link="base_new"/>
+    <origin xyz="0 0 0" rpy="-1.5708 0 0"/> 
+  </joint>
   <!-- Link base_new -->
   <link name="base_new">
     <inertial>

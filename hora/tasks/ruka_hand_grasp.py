@@ -26,26 +26,26 @@ class RukaHandGrasp(RukaHandHora):
         # Expanded to 20 joints. Added 0.0 at mimic indices [2, 6, 10, 14]
         # These will be overwritten by the mimic logic anyway.
         self.canonical_pose = [
-            -0.17,     # base pitch
-            -0.465732, # wrist_yaw
-            -0.191799, # index_splay
-            1,       # index_mcp (0, 1.9)
-            0.0,       # index_pip
-            0.0,       # index_dip
-            1,      # mid_mcp -0.2 1.91986
-            0.0,       # mid_pip
-            0.0,       # mid_dip
-            -0.301426, # ring_splay
-            1,       # ring_mcp 0.0 1.91986
-            0.0,       # ring_pip
-            0.0,       # ring_dip
-            -0.298132, # pinky_splay
-            1,       # pinky_mcp 0.0 1.91986
-            0.0,       # pinky_pip
-            0.0,       # pinky_dip
-            0.5,      # thumb_cmc
-            -0.77,     # thumb_mcp
-            0.0,       # thumb_ip
+            0.27,      # base pitch -0.661974 0.647023
+            0.17,      # wrist_yaw
+            -0.16,     # index_splay
+            0.77,       # index_mcp (0, 1.9)
+            0.32,      # index_pip
+            0.32,      # index_dip
+            0.77,      # mid_mcp -0.2 1.91986
+            0.33,      # mid_pip
+            0.33,      # mid_dip
+            -0.3,      # ring_splay
+            0.77,      # ring_mcp 0.0 1.91986
+            0.32,       # ring_pip
+            0.32,       # ring_dip
+            -0.12,     # pinky_splay
+            0.77,      # pinky_mcp 0.0 1.91986
+            0.32,       # pinky_pip
+            0.32,       # pinky_dip
+            0.5,       # thumb_cmc
+            -0.53,     # thumb_mcp
+            0.2,       # thumb_ip
         ]
         
         # Joint Indices for 20-DOF hand
