@@ -63,6 +63,7 @@ class RukaHandGrasp(RukaHandHora):
         # Record joint angles from environment 0 at every step
         current_angles = self.allegro_hand_dof_pos[0].detach().cpu().numpy()
         self.debug_joint_angles.append(current_angles)
+        print("angles:", current_angles)
         self.debug_step_count += 1
         save_path = f'joint_angles.npy'
         np.save(save_path, np.array(self.debug_joint_angles))
