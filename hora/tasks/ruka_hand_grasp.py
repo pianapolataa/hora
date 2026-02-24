@@ -177,8 +177,22 @@ from hora.tasks.ruka_hand_hora import RukaHandHora
 
 class RukaHandGrasp(RukaHandHora):
     def __init__(self, config, sim_device, graphics_device_id, headless):
-        super().__init__(config, sim_device=sim_device, graphics_device_id=graphics_device_id, headless=headless)
+
+        # FORCE graphics_device_id to 0 if it is -1
+        if graphics_device_id == -1:
+            graphics_device_id = 0
         
+        super().__init__(config, sim_device=sim_device, graphics_device_id=graphics_device_id, headless=headless)
+
+        # --- CAMERA SETUP ---
+        from isaacgym import gymapi
+        cam_props = gymapi.CameraProperties()
+        cam_props.width = 640
+        cam_props.height = 480
+        cam_props.enable_tensors = True # Required for some headless configs
+        
+        self.camera_handle = self.gym.create_camera_sensor(self.envs[0], cam_props)
+    
         # 20 joints + 7 root state (pos/rot) = 27 columns
         self.saved_grasping_states = torch.zeros((0, 27), dtype=torch.float, device=self.device)
         
