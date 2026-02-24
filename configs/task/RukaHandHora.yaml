@@ -56,7 +56,7 @@ env:
     randomizeCOMLower: -0.01
     randomizeCOMUpper: 0.01
     randomizeFriction: True
-    randomizeFrictionLower: 1.3
+    randomizeFrictionLower: 0.3
     randomizeFrictionUpper: 3.0
     randomizeScale: True
     # if scale_list_init is True, randomizeScaleLower and randomizeScaleUpper is not useful
