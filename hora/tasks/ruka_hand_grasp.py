@@ -236,30 +236,25 @@ class RukaHandGrasp(RukaHandHora):
     def post_physics_step(self):
         super().post_physics_step()
         
-        # --- FAIL-SAFE IMAGE RENDERING ---
-        # 1. Step graphics if the function exists
-        if hasattr(self.gym, 'step_graphics'):
-            self.gym.step_graphics(self.sim)
-            
-        # 2. Render camera sensors (this is the most stable method in Preview 4)
-        if hasattr(self.gym, 'render_all_camera_sensors'):
-            self.gym.render_all_camera_sensors(self.sim)
-            
-        # 3. Save the image to file
-        if hasattr(self.gym, 'write_camera_image_to_file'):
-            fname = f"debug/frame_{self.debug_step_count:04d}.png"
-            self.gym.write_camera_image_to_file(self.sim, self.envs[0], self.camera_handle, gymapi.IMAGE_COLOR, fname)
-        # ---------------------------------
+        # 1. Sync Physics to Graphics
+        self.gym.fetch_results(self.sim, True)
+        self.gym.step_graphics(self.sim)
+        
+        # 2. Render Cameras (Verified API name)
+        # Note: This must happen after step_graphics
+        self.gym.render_all_camera_sensors(self.sim)
 
-        # --- DEBUG SAVING LOGIC ---
-        # Record joint angles from environment 0 at every step
+        # 3. Save Image if Camera is valid
+        if self.camera_handle != -1:
+            # We only save every 10 steps to prevent disk I/O from slowing you down
+            if self.debug_step_count % 10 == 0:
+                fname = os.path.join("debug", f"frame_{self.debug_step_count:04d}.png")
+                self.gym.write_camera_image_to_file(self.sim, self.envs[0], self.camera_handle, gymapi.IMAGE_COLOR, fname)
+        
+        # 4. Joint Angle Logging (Your existing logic)
         current_angles = self.allegro_hand_dof_pos[0].detach().cpu().numpy()
         self.debug_joint_angles.append(current_angles)
-        print("angles:", current_angles)
         self.debug_step_count += 1
-        save_path = f'joint_angles.npy'
-        np.save(save_path, np.array(self.debug_joint_angles))
-        # ---------------------------
 
     def reset_idx(self, env_ids):
         # ... [Keep randomization of mass/PD gains the same as your provided snippet] ...
