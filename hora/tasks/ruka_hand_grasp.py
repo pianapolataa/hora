@@ -68,16 +68,17 @@ class RukaHandGrasp(RukaHandHora):
         save_path = f'joint_angles.npy'
         np.save(save_path, np.array(self.debug_joint_angles))
 
-        # 1. Sync the graphics (This is where the error was)
-        self.gym.fetch_results(self.sim, True) 
+       # Sync graphics
+        self.gym.fetch_results(self.sim, True)
         self.gym.step_graphics(self.sim)
-        self.gym.render_all_tensors(self.sim) # Note: render_all_tensors is on self.sim
         
-        # 2. Capture and save
+        # FIXED: Method is called on self.sim, and it takes no arguments
+        self.sim.render_all_tensors() 
+        
+        # Save the image
         fname = f"debug/frame_{self.debug_step_count:04d}.png"
-        # We use the camera handle created in __init__
         self.gym.write_camera_image_to_file(self.sim, self.envs[0], self.camera_handle, gymapi.IMAGE_COLOR, fname)
-        print(f"Saved snapshot: {fname}")
+        print(f"Saved: {fname}")
         # ---------------------------
 
     def reset_idx(self, env_ids):
