@@ -70,7 +70,7 @@ def run_test():
         baseMass=0.05,
         baseCollisionShapeIndex=collision_shape_id,
         baseVisualShapeIndex=visual_shape_id,
-        basePosition=[0.01, 0.17, 0.67], # Slightly above the palm center
+        basePosition=[0.01, 0.17, 0.6], # Slightly above the palm center
     )
 
     # Add friction to both hand and ball to simulate the real physics
