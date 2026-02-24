@@ -11,20 +11,20 @@ test_angles = [
             0.27,      # base pitch -0.661974 0.647023
             0.17,      # wrist_yaw
             -0.16,     # index_splay
-            0.67,       # index_mcp (0, 1.9)
-            0.32,      # index_pip
-            0.32,      # index_dip
-            0.5,      # mid_mcp -0.2 1.91986
-            0.33,      # mid_pip
-            0.33,      # mid_dip
+            0.47,       # index_mcp (0, 1.9)
+            0.43,      # index_pip
+            0.43,      # index_dip
+            0.47,      # mid_mcp -0.2 1.91986
+            0.43,      # mid_pip
+            0.43,      # mid_dip
             -0.3,      # ring_splay
-            0.67,      # ring_mcp 0.0 1.91986
-            0.32,       # ring_pip
-            0.32,       # ring_dip
+            0.47,      # ring_mcp 0.0 1.91986
+            0.43,       # ring_pip
+            0.43,       # ring_dip
             -0.12,     # pinky_splay
-            0.67,      # pinky_mcp 0.0 1.91986
-            0.32,       # pinky_pip
-            0.32,       # pinky_dip
+            0.47,      # pinky_mcp 0.0 1.91986
+            0.43,       # pinky_pip
+            0.43,       # pinky_dip
             0.9,       # thumb_cmc
             -0.53,     # thumb_mcp
             0.2,       # thumb_ip
