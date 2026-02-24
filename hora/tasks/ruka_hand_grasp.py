@@ -67,6 +67,16 @@ class RukaHandGrasp(RukaHandHora):
         self.debug_step_count += 1
         save_path = f'joint_angles.npy'
         np.save(save_path, np.array(self.debug_joint_angles))
+
+        self.gym.render_all_tensors(self.sim)
+        self.gym.fetch_results(self.sim, True)
+        
+        # Step the graphics (even in headless, this fills the buffer)
+        self.gym.step_graphics(self.sim)
+        
+        # Write a raw image file directly to disk
+        filename = f"debug/frame_{self.debug_step_count:04d}.png"
+        self.gym.write_viewer_image_to_file(self.viewer, filename)
         # ---------------------------
 
     def reset_idx(self, env_ids):
