@@ -26,7 +26,7 @@ test_angles = [
             0.43,       # pinky_pip
             0.43,       # pinky_dip
             0.9,       # thumb_cmc
-            -0.53,     # thumb_mcp
+            -0.4,     # thumb_mcp
             0.2,       # thumb_ip
         ]
 
